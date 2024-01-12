@@ -1,8 +1,8 @@
 import { Outlet } from "react-router-dom";
 import { menuRoutes } from "../router/router";
-import SidebarMenuItem from "../components/sidebar/SidebarMenuItem";
+import { SidebarMenuItem } from "../components/sidebar/SidebarMenuItem";
 
-export default function DashboardLayout() {
+export const DashboardLayout = () => {
   return (
     <>
     <main className="flex flex-row mt-7">
@@ -17,7 +17,7 @@ export default function DashboardLayout() {
         {/* Opciones del menú */}
         {
             menuRoutes.map( option => (
-                <SidebarMenuItem option={ option } />
+                <SidebarMenuItem key={option.to} {...option } />
             ))
         }
         </nav>
