@@ -4,12 +4,14 @@ interface Props {
     onSendMessage: (message: string) => void;
     placeholder?: string;
     disableCorrections?: boolean;
+    accept?: string;
 }
 
-export const TextMessageBoxFile = ({ onSendMessage, placeholder, disableCorrections = false}: Props) => {
+export const TextMessageBoxFile = ({ onSendMessage, placeholder, disableCorrections = false, accept}: Props) => {
     
     const [message, setMessage] = useState('');
 
+    const [selectedFile, setSelectedFile] = useState<File | null>();
     const inpuntFileRef = useRef<HTMLInputElement>(null);
   
     const handleSendMessage = (event: React.FormEvent<HTMLFormElement>) => {
@@ -36,6 +38,9 @@ export const TextMessageBoxFile = ({ onSendMessage, placeholder, disableCorrecti
         <input
             type="file"
             ref={ inpuntFileRef}
+            accept={ accept }
+            onChange={ (event) => setSelectedFile(event.target.files?.item(0))}
+            hidden
         />
     </div>    
 
@@ -60,7 +65,11 @@ export const TextMessageBoxFile = ({ onSendMessage, placeholder, disableCorrecti
 
      <div className="ml-4">
         <button className="btn-primary">
-            <span className="mr-2">Enviar</span>
+            {
+               ( !selectedFile )
+                ? <span className="mr-2">Enviar</span>
+                : <span className="mr-2">{ selectedFile.name.substring(0,10) + '...' } </span> 
+            }
             <i className="fa-regular fa-paper-plane"></i>
         </button>
      </div>
