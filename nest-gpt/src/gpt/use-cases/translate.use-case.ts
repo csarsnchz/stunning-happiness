@@ -27,10 +27,6 @@ export const translateUseCase = async( openai: OpenAI, { prompt, lang }: Options
 
                     `
             },
-            {
-                role: "user",
-                content: prompt
-            }
         ],
         model: "gpt-3.5-turbo",
         temperature: 0.3,
@@ -38,5 +34,5 @@ export const translateUseCase = async( openai: OpenAI, { prompt, lang }: Options
       });
     
           
-    return completion.choices[0].message;
+    return { message: completion.choices[0].message };
 }
