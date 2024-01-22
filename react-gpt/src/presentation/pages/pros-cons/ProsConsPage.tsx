@@ -5,9 +5,6 @@ import { useState }from 'react';
 interface Message {
   text: string;
   isGpt: boolean;
-  info?: {
-    message: string;
-  }
 }
 
 export const ProsConsPage = () => {
@@ -19,13 +16,12 @@ export const ProsConsPage = () => {
     setMessages((prev) => [...prev, { text: text, isGpt: false }]);
     
     //Use Case
-    const { ok, message } = await prosConsUseCase(text);
+    const { ok, content } = await prosConsUseCase(text);
     if (!ok) {
       setMessages((prev) => [...prev, { text: "No se pudo procesar la corrección", isGpt: true }]);
     } else {
       setMessages((prev) => [...prev, { 
-        text: message, isGpt: true, 
-        info: { message }
+        text: content, isGpt: true
        }]);
     }
 
@@ -45,9 +41,7 @@ export const ProsConsPage = () => {
               messages.map( (message, index) => (
                 message.isGpt 
                 ? (
-                  <GptProsConsDiscusserMessage 
-                      message={[]} key={index}
-                      {...message}                    />
+                  <GptMessage key={ index } text={message.text} />
                   /* errors= { message.info!.errors }
                     message= { message.info!.message }
                     userScore= { message.info!.userScore }

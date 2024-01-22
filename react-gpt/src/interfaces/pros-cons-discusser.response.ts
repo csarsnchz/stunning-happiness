@@ -1,5 +1,6 @@
 
 
 export interface ProsConsDiscusserResponse {
-    message: string;
+    role: string;
+    content: string;
 }
