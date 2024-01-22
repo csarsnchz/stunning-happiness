@@ -37,7 +37,6 @@ export const translateUseCase = async( openai: OpenAI, { prompt, lang }: Options
         max_tokens: 1500,
       });
     
-      const jsonResp = JSON.parse(completion.choices[0].message.content);
-    
-    return jsonResp;
+          
+    return completion.choices[0].message;
 }
