@@ -1,6 +1,6 @@
-import { prosConsSteamUseCase } from "../../../core/use-cases";
+import { prosConsSteamGeneratorUseCase } from "../../../core/use-cases";
 import { GptMessage, MyMessage, TypingLoader, TextMessageBox } from "../../components";
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 
 interface Message {
   text: string;
@@ -8,19 +8,61 @@ interface Message {
 }
 
 export const ProsConsStreamPage = () => {
+
+  const abortController = useRef( new AbortController() );
+  const isRunning = useRef( false );
+
   const [isloading, setIsloading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   
   const handlePost = async (text: string) => {
+    if (isRunning.current) {
+      abortController.current.abort();
+      abortController.current = new AbortController();
+    }
     setIsloading(true);
+    isRunning.current = true;
     setMessages((prev) => [...prev, { text: text, isGpt: false }]);
     
     //Use Case
-    await prosConsSteamUseCase(text);
+     const stream = prosConsSteamGeneratorUseCase( text, abortController.current.signal );
+     setIsloading(false);
+     setMessages( (messages) => [ ...messages, { text: '', isGpt: true } ] );
+     for await (const text of stream) {
+      setMessages( (messages) => {
+        const newMessages = [ ...messages ];
+        newMessages[ newMessages.length - 1 ].text = text;
+        return newMessages;
+      } );
+      
+     
+    //const reader = await prosConsSteamUseCase(text);
     
-    setIsloading(false);
+    //setIsloading(false);
     
-    //Mensaje isGPT = true
+    //Generar el mensaje
+    //if ( !reader) {
+    //  return setMessages((prev) => [...prev, { text: "No se pudo generar el mensaje", isGpt: true }]);
+    //}
+
+    //const decoder = new TextDecoder();
+    //let message = '';
+    //setMessages( (messages) => [ ...messages, { text: message, isGpt: true } ] );
+
+    //while (true) {
+    //  const { done, value } = await reader.read();
+    //  if (done) break;
+
+    //  const decodedChunk = decoder.decode( value, { stream: true } );
+    //  message += decodedChunk;
+    //  setMessages( (messages) => {
+    //    const newMessages = [ ...messages ];
+    //    newMessages[ newMessages.length - 1 ].text = message;
+    //    return newMessages;
+    //  } );
+    }
+
+    isRunning.current = false;
   }
   
   return (
@@ -34,7 +76,7 @@ export const ProsConsStreamPage = () => {
               messages.map( (message, index) => (
                 message.isGpt 
                 ? (
-                  <GptMessage key={ index } text="Esto es OpenAI" />
+                  <GptMessage key={ index } text={message.text} />
                 )
                 : (
                   <MyMessage key={ index } text={message.text} />
@@ -60,3 +102,4 @@ export const ProsConsStreamPage = () => {
     </div>
   )
 }
+
