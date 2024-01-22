@@ -3,7 +3,7 @@ import AssistantPage from "../pages/assistant/AssistantPage";
 import AudioToTextPage from "../pages/audio-to-text/AudioToTextPage";
 import ImageGenerationPage from "../pages/image-generation/ImageGenerationPage";
 import { OrthographyPage } from "../pages/orthography/OrthographyPage";
-import ProsConsStreamPage from "../pages/pros-cons-stream/ProsConsStreamPage";
+import { ProsConsStreamPage } from "../pages/pros-cons-stream/ProsConsStreamPage";
 import { ProsConsPage } from "../pages/pros-cons/ProsConsPage";
 import TextToAudioPage from "../pages/text-to-audio/TextToAudioPage";
 import TranslatePage from "../pages/translate/TranslatePage";
