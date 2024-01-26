@@ -11,7 +11,7 @@
 export const textToAudioUseCase = async (prompt: string, voice: string) => {
     try {
 
-        const resp = await fetch(`${ import.meta.env.VITE_GPT_API }/text-to-audiok`, {
+        const resp = await fetch(`${ import.meta.env.VITE_GPT_API }/text-to-audio`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
