@@ -1,5 +1,5 @@
 import { orthographyUseCase } from "../../../core/use-cases";
-import { GptMessage, GptOrthographyMessage, MyMessage, TypingLoader, TextMessageBox, TextMessageBoxFile, TextMessageBoxSelect } from "../../components";
+import { GptMessage, GptOrthographyMessage, MyMessage, TypingLoader, TextMessageBox } from "../../components";
 import { useState }from 'react';
 
 interface Message {

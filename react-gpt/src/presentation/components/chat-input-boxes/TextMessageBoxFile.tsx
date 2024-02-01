@@ -1,4 +1,4 @@
-import { FormEvent, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 interface Props {
     onSendMessage: (message: string) => void;
