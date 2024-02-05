@@ -56,7 +56,7 @@ async imageGeneration(imageGenerationDTO: ImageGenerationDTO) {
 }
 
 async getImage(filename: string) {
-    const filePath = path.resolve( './', './generated/images/', `${filename}.png` );
+    const filePath = path.resolve( './', './generated/images/', `${filename}` );
     const fileExists = fs.existsSync( filePath );
 
     if (!fileExists) throw new NotFoundException(`File ${filename}.png not found`);

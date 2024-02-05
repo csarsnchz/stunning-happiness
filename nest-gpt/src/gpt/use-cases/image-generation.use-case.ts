@@ -15,7 +15,7 @@ export const imageGenerationUseCase = async (openai: OpenAI, options: Options) =
   if (!originalimage || !maskImage) {
     const response = await openai.images.generate({
         prompt: prompt,
-        model: 'dall-e-3',
+        model: 'dall-e-2',
         n: 1,
         size: '1024x1024',
         quality: 'standard',
