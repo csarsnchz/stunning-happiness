@@ -1,8 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { orthographyCheckUseCase, prosConsDiscusserUseCase, prosConsDiscusserSteamUseCase, translateUseCase, textToAudioUseCase, audioToTextUseCase, imageGenerationUseCase } from './use-cases';
-import { AudioToTextDto, ImageGenerationDTO, OrthographyDto, ProsConsDiscusserDto, TextToAudioDTO, TranslatorDTO } from './dtos';
+import { orthographyCheckUseCase, prosConsDiscusserUseCase, prosConsDiscusserSteamUseCase, translateUseCase, textToAudioUseCase, audioToTextUseCase, imageGenerationUseCase, imageVariationUseCase } from './use-cases';
+import { AudioToTextDto, ImageGenerationDTO, ImageVariationDto, OrthographyDto, ProsConsDiscusserDto, TextToAudioDTO, TranslatorDTO } from './dtos';
 
 import OpenAI from 'openai';
 
@@ -62,6 +62,11 @@ async getImage(filename: string) {
     if (!fileExists) throw new NotFoundException(`File ${filename}.png not found`);
     
     return filePath;
+}
+
+async getImageVariation(imageVariationDto: ImageVariationDto) {
+    const { baseImage } = imageVariationDto;
+    return await imageVariationUseCase( this.openai, { baseImage });
 }
 
 }

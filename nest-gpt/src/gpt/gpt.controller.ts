@@ -1,6 +1,6 @@
 import { Body, Controller, FileTypeValidator, Get, HttpStatus, MaxFileSizeValidator, NotFoundException, Param, ParseFilePipe, Post, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { GptService } from './gpt.service';
-import { OrthographyDto, ProsConsDiscusserDto, TranslatorDTO, TextToAudioDTO, AudioToTextDto, ImageGenerationDTO } from './dtos';
+import { OrthographyDto, ProsConsDiscusserDto, TranslatorDTO, TextToAudioDTO, AudioToTextDto, ImageGenerationDTO, ImageVariationDto } from './dtos';
 import { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -106,6 +106,8 @@ export class GptController {
       const image = await this.gptService.imageGeneration(imageGenerationDTO);
       const {url, localPath, revised_prompt} = image;
       if (!url) throw new NotFoundException('Image not found');
+      if (!localPath) throw new NotFoundException('Image not found');
+      if (!revised_prompt) throw new NotFoundException('Image not found');
       res.setHeader('Content-type', 'image/png');
       res.status(HttpStatus.OK);
       res.sendFile(url);
@@ -117,9 +119,16 @@ export class GptController {
       @Res() res: Response,
       ) {
       const filePath = await this.gptService.getImage(filename);
+      if (!filePath) throw new NotFoundException('Image not found');
       res.setHeader('Content-type', 'image/png');
       res.status(HttpStatus.OK);
       res.sendFile(filePath);
+    }
+
+    @Post('image-variation')
+    async imageVariation(
+      @Body() imageVariationDto: ImageVariationDto) {
+      return await this.gptService.getImageVariation(imageVariationDto);
     }
   
 }
