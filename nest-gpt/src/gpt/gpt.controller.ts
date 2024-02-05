@@ -1,6 +1,6 @@
-import { Body, Controller, FileTypeValidator, Get, HttpStatus, MaxFileSizeValidator, Param, ParseFilePipe, Post, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, FileTypeValidator, Get, HttpStatus, MaxFileSizeValidator, NotFoundException, Param, ParseFilePipe, Post, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { GptService } from './gpt.service';
-import { OrthographyDto, ProsConsDiscusserDto, TranslatorDTO, TextToAudioDTO, AudioToTextDto } from './dtos';
+import { OrthographyDto, ProsConsDiscusserDto, TranslatorDTO, TextToAudioDTO, AudioToTextDto, ImageGenerationDTO } from './dtos';
 import { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -96,6 +96,30 @@ export class GptController {
         @Body() audioToTextDto: AudioToTextDto,
       ) {
       return await this.gptService.audioToText({ audioFile: file, audioToTextDto });
+    }
+
+    @Post('image-generation')
+    async imageGeneration(
+      @Body() imageGenerationDTO: ImageGenerationDTO,
+      @Res() res: Response,
+      ) {
+      const image = await this.gptService.imageGeneration(imageGenerationDTO);
+      const {url, localPath, revised_prompt} = image;
+      if (!url) throw new NotFoundException('Image not found');
+      res.setHeader('Content-type', 'image/png');
+      res.status(HttpStatus.OK);
+      res.sendFile(url);
+    }
+
+    @Get('image-generation/:filename')
+    async getImage(
+      @Param('filename') filename: string,
+      @Res() res: Response,
+      ) {
+      const filePath = await this.gptService.getImage(filename);
+      res.setHeader('Content-type', 'image/png');
+      res.status(HttpStatus.OK);
+      res.sendFile(filePath);
     }
   
 }
