@@ -100,17 +100,8 @@ export class GptController {
 
     @Post('image-generation')
     async imageGeneration(
-      @Body() imageGenerationDTO: ImageGenerationDTO,
-      @Res() res: Response,
-      ) {
-      const image = await this.gptService.imageGeneration(imageGenerationDTO);
-      const {url, localPath, revised_prompt} = image;
-      if (!url) throw new NotFoundException('Image not found');
-      if (!localPath) throw new NotFoundException('Image not found');
-      if (!revised_prompt) throw new NotFoundException('Image not found');
-      res.setHeader('Content-type', 'image/png');
-      res.status(HttpStatus.OK);
-      res.sendFile(url);
+      @Body() imageGenerationDTO: ImageGenerationDTO) {
+      return await this.gptService.imageGeneration(imageGenerationDTO);
     }
 
     @Get('image-generation/:filename')

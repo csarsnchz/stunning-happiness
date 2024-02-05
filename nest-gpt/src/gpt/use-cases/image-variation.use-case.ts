@@ -1,5 +1,6 @@
-import OpenAI from 'openai';
 import fs from 'fs';
+
+import OpenAI from 'openai';
 import { downloadImageAsPng } from 'src/helpers';
 
 

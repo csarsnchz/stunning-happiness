@@ -45,5 +45,5 @@ export const downloadBase64ImageAsPng = async (base64Image: string, fullPath: bo
           .png()
           .ensureAlpha()
           .toFile( completePath );
-          return fullPath ? completePath : imageNamePng;
+    return fullPath ? completePath : imageNamePng;
   }
