@@ -1,7 +1,7 @@
 import { Navigate, createBrowserRouter } from "react-router-dom";
 import AssistantPage from "../pages/assistant/AssistantPage";
 import { AudioToTextPage } from "../pages/audio-to-text/AudioToTextPage";
-import ImageGenerationPage from "../pages/image-generation/ImageGenerationPage";
+import { ImageGenerationPage } from "../pages/image-generation/ImageGenerationPage";
 import { OrthographyPage } from "../pages/orthography/OrthographyPage";
 import { ProsConsStreamPage } from "../pages/pros-cons-stream/ProsConsStreamPage";
 import { ProsConsPage } from "../pages/pros-cons/ProsConsPage";
