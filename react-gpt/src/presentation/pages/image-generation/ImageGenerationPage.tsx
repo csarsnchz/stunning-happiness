@@ -1,4 +1,5 @@
-import { GptMessage, MyMessage, TypingLoader, TextMessageBox } from "../../components";
+import { imageGenerationUseCase } from "../../../core/use-cases";
+import { GptMessage, MyMessage, TypingLoader, TextMessageBox, GptMessageImage } from "../../components";
 import { useState } from 'react';
 
 interface Message {
@@ -19,10 +20,15 @@ export const ImageGenerationPage = () => {
     setMessages((prev) => [...prev, { text: text, isGpt: false }]);
     
     //Use Case
+    const imageInfo = await imageGenerationUseCase(text);
     
     setIsloading(false);
     
-    //Mensaje isGPT = true
+    if (!imageInfo) {
+       return setMessages((prev) => [...prev, { text: "No se pudo generar la imagen", isGpt: true }]);
+    }
+
+    setMessages((prev) => [...prev, { text: text, isGpt: true, info: {imageUrl: imageInfo.imageUrl, alt: imageInfo.alt} }]);
   }
   
   return (
@@ -36,7 +42,7 @@ export const ImageGenerationPage = () => {
               messages.map( (message, index) => (
                 message.isGpt 
                 ? (
-                  <GptMessage key={ index } text={message.text} />
+                  <GptMessageImage key={ index } text={message.text} imageUrl={message.info?.imageUrl!} alt={message.info?.alt!}/>
                 )
                 : (
                   <MyMessage key={ index } text={message.text} />

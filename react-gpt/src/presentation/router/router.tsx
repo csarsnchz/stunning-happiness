@@ -7,7 +7,7 @@ import { ProsConsStreamPage } from "../pages/pros-cons-stream/ProsConsStreamPage
 import { ProsConsPage } from "../pages/pros-cons/ProsConsPage";
 import { TextToAudioPage } from "../pages/text-to-audio/TextToAudioPage";
 import { TranslatePage } from "../pages/translate/TranslatePage";
-import ImageTunningPage from "../pages/image-generation/ImageTunningPage";
+import { ImageTunningPage } from "../pages/image-generation/ImageTunningPage";
 import { DashboardLayout } from "../layouts/DashboardLayout";
 
 export const menuRoutes = [
