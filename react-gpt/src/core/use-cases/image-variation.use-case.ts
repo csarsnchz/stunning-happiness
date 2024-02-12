@@ -9,7 +9,7 @@ interface Image {
 export const imageVariationUseCase = async (originalImage: string): Promise<GeneratedImage> => {
     try {
 
-        const resp = await fetch(`${ import.meta.env.VITE_GPT_API }/image-generation`, {
+        const resp = await fetch(`${ import.meta.env.VITE_GPT_API }/image-variation`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

@@ -1,4 +1,4 @@
-import { imageVariationUseCase } from "../../../core/use-cases";
+import { imageGenerationUseCase, imageVariationUseCase } from "../../../core/use-cases";
 import { GptMessage, MyMessage, TypingLoader, TextMessageBox, GptMessageImage } from "../../components";
 import { useState } from 'react';
 
@@ -43,7 +43,7 @@ export const ImageTunningPage = () => {
     setMessages((prev) => [...prev, { text: text, isGpt: false }]);
     
     //Use Case
-    const imageInfo = await imageVariationUseCase(originalImageAndMask.originalImage!);
+    const imageInfo = await imageGenerationUseCase(text);
     
     setIsloading(false);
     
