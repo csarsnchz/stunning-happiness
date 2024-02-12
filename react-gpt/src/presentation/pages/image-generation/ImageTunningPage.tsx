@@ -1,5 +1,5 @@
 import { imageGenerationUseCase, imageVariationUseCase } from "../../../core/use-cases";
-import { GptMessage, MyMessage, TypingLoader, TextMessageBox, GptMessageImage } from "../../components";
+import { GptMessage, MyMessage, TypingLoader, TextMessageBox, GptMessageImage, GptMessageSelectedImage } from "../../components";
 import { useState } from 'react';
 
 interface Message {
@@ -13,7 +13,16 @@ interface Message {
 
 export const ImageTunningPage = () => {
   const [isloading, setIsloading] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      isGpt: true,
+      text: "Imagen base para generar variante",
+      info: {
+        imageUrl: "http://localhost:3000/gpt/image-generation/1707708434475.png",
+        alt: "Imagen base"
+      }
+    }
+  ]);
   const [originalImageAndMask, setOriginalImageAndMask] = useState({
     originalImage: undefined as string | undefined,
     maskImage: undefined as string | undefined
@@ -41,9 +50,9 @@ export const ImageTunningPage = () => {
   const handlePost = async (text: string) => {
     setIsloading(true);
     setMessages((prev) => [...prev, { text: text, isGpt: false }]);
-    
+    const {originalImage, maskImage} = originalImageAndMask
     //Use Case
-    const imageInfo = await imageGenerationUseCase(text);
+    const imageInfo = await imageGenerationUseCase(text, originalImage, maskImage);
     
     setIsloading(false);
     
@@ -59,7 +68,7 @@ export const ImageTunningPage = () => {
       {
         originalImageAndMask.originalImage && (
           <div className="fixed flex flex-col items-center top-10 right-10 z-10 fade-in">
-            <img src={originalImageAndMask.originalImage} alt="Imagen Original" className="border rounded-xl w-36 h-36 object-contain" />
+            <img src={originalImageAndMask.maskImage ?? originalImageAndMask.originalImage} alt="Imagen Original" className="border rounded-xl w-36 h-36 object-contain" />
             <button onClick={handleVariation} className="btn-primary mt-2">Generar Variante</button>
           </div>
         )
@@ -74,7 +83,7 @@ export const ImageTunningPage = () => {
                 messages.map( (message, index) => (
                   message.isGpt 
                   ? (
-                    <GptMessageImage key={ index } text={message.text} imageUrl={message.info?.imageUrl!} alt={message.info?.alt!} onImageSelected={(url) => setOriginalImageAndMask({originalImage: url, maskImage: undefined})}/>
+                    <GptMessageSelectedImage key={ index } text={message.text} imageUrl={message.info?.imageUrl!} alt={message.info?.alt!} onImageSelected={(maskImageUrl) => setOriginalImageAndMask({originalImage: message.info?.imageUrl, maskImage: maskImageUrl})}/>
                   )
                   : (
                     <MyMessage key={ index } text={message.text} />
